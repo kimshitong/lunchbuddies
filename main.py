@@ -169,20 +169,9 @@ def at_answer(message):
         else:
             bot.send_message(message.chat.id, "Registration Failed")
     
-    elif(status == "join"):
-        #Array Size = 2 && Validity of the number
-        #
+
 
 #Look into
-
-    
-#bla ok ha
-["bla","ok","ha"]
-/join 3 okas
-    
-
-    
-
 
 
 
@@ -196,9 +185,10 @@ def at_answer(message):
 # ]
 
 
-    
+
+
 
 bot.polling()
 
 #Join
-/join 3
+# /join 3
