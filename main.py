@@ -141,7 +141,16 @@ def list(message):
         Data_Month = int(singledata[2][3:5])
         Data_Year = int(singledata[2][6:10])
         CompareDate = datetime.datetime(Data_Year,Data_Month,Data_Date,int(singledata[3][0:2]),int(singledata[3][2:4]))
-        
+         
+	#Determine pax
+        pax = 1
+        print(singledata)
+        if(singledata[6] != '0'):
+            pax += 1
+        if(singledata[7] != '0'):
+            pax += 1
+        if(singledata[8] != '0'):
+            pax += 1
         if(CompareDate > x):
             Message += "="*30 + "\n" + "Event Detail :  \n" "Event "+ singledata[0] +" : Jio Lunch at " + singledata[1] + " ( "+ str(pax) +" / 4) \n"+"Date/Time : " + str(CompareDate) +"\n"
 
