@@ -149,6 +149,7 @@ def at_answer(message):
         storage.append("0")
         storage.append("0")
         storage.append("0")
+        storage.append(False)
         
         #Confirmation
         bot.send_message(message.chat.id, "="*30)
