@@ -52,6 +52,7 @@ def editing(index, column, message):
 def loading():
 
     global bigdata
+    bigdata = []
     with open('data.csv', 'r') as file:
         # Create a CSV reader object
         reader = csv.reader(file)
@@ -115,8 +116,10 @@ def greet(message):
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-	bot.send_message(message.chat.id, "Welcome ! Please use the following commands.")
-	bot.send_message(message.chat.id, "/list /create /join /edit")
+    global status
+    status = ""
+    bot.send_message(message.chat.id, "Welcome ! Please use the following commands.")
+    bot.send_message(message.chat.id, "/list /create /join /edit")
 
 @bot.message_handler(commands=['create'])
 def send_create(message):
@@ -132,9 +135,10 @@ def send_cancel(message):
     bot.send_message(message.chat.id, "@cancel <EventNo>  for example : @cancel 1" )
 
 @bot.message_handler(commands=['list'])
-def list(message):
+def send_list(message):
     loading()
-    Message = "";
+    Message = ""
+    print(bigdata)
     for singledata in bigdata:
         
         x = datetime.datetime.now()
@@ -163,18 +167,18 @@ def list(message):
         
         if(CompareDate > x):
             Message += "="*30 + "\n" + "Event Detail "+ CancelledMessage +" :  \n" "Event "+ singledata[0]  + " : Jio Lunch at " + singledata[1] + " ( "+ str(pax) +" / 4) \n"+"Date/Time : " + str(CompareDate) +"\n"
-
     bot.send_message(message.chat.id, Message + ("="*30) )
 
 @bot.message_handler(commands=['join'])
-def list(message):
+def send_join(message):
     global status
     status = "join" 
     bot.send_message(message.chat.id, "Please use the following format to join event")
     bot.send_message(message.chat.id, "@join 1") 
 
 @bot.message_handler(func =lambda msg: msg.text is not None)
-def at_answer(message): 
+def at_answer(message):
+    loading() 
     global storage
     global status
     texts = message.text.split()
@@ -218,7 +222,6 @@ def at_answer(message):
             bot.send_message(message.chat.id, "Registration Failed")
     elif(status == "cancel"):
         #Size, Numeric, Contains 
-        loading()
         if len(texts) == 2 and texts[1].isdigit() and int(texts[1]) <= len(bigdata) and  int(texts[1]) >= 1:
                 print('yes')
                 cancel(int(texts[1]))
