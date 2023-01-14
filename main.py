@@ -212,6 +212,7 @@ def at_answer(message):
         if len(texts) == 2 and texts[1].isnumeric() and int(texts[1]) <= len(bigdata) and int(texts[1]) >=1:
             cancel(texts[1])
         else:
+			status = ""
             bot.send_message(message.chat.id, "Invalid Input")
 	
     elif(status == "join"):
