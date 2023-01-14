@@ -13,6 +13,14 @@ status = ""
 storage = [] 
 StoreStatus = False
 
+def cancel(eventno):
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv('data.csv')
+    # Change the value of a specific cell
+    df.iloc[eventno, 9] = False
+    # Write the DataFrame back to the CSV file
+    df.to_csv('data.csv', index=False)
+
 def importing(data):
     
     with open('data.csv', 'r') as file:
@@ -116,6 +124,12 @@ def send_create(message):
     bot.send_message(message.chat.id, "Please use the following format to create event ")
     bot.send_message(message.chat.id, "@venue UTown Green")
 
+@bot.message_handler(commands=['cancel'])
+def cancel(message):
+    global status
+    status = "cancel"     
+    bot.send_message(message.chat.id, "@cancel <EventNo>  for example : @cancel 1" )
+
 @bot.message_handler(commands=['list'])
 def list(message):
     loading()
@@ -184,6 +198,12 @@ def at_answer(message):
                 bot.send_message(message.chat.id, "Registration Confirmed, Thanks")
         else:
             bot.send_message(message.chat.id, "Registration Failed")
+    elif(status == "cancel"):
+        #Size, Numeric, Contains 
+        if len(texts) == 2 and texts[1].isnumeric() and int(texts[1]) <= len(bigdata) and int(texts[1]) >=1:
+            cancel(texts[1])
+        else:
+            bot.send_message(message.chat.id, "Invalid Input")
 	
     elif(status == "join"):
         #Array Size = 2 && Validity of the number
