@@ -115,7 +115,7 @@ def list(message):
         CompareDate = datetime.datetime(Data_Year,Data_Month,Data_Date,int(singledata[3][0:2]),int(singledata[3][2:4]))
         
         if(CompareDate > x):
-            Message += "="*30 + "\n" + "Event Detail : + \n" "Event "+ singledata[0] +" : Jio Lunch at " + singledata[1] + "\n"+"Date/Time : " + str(CompareDate) +"\n"
+            Message += "="*30 + "\n" + "Event Detail :  \n" "Event "+ singledata[0] +" : Jio Lunch at " + singledata[1] + " ( "+ str(pax) +" / 4) \n"+"Date/Time : " + str(CompareDate) +"\n"
 
     bot.send_message(message.chat.id, Message + ("="*30) )
 
