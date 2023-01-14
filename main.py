@@ -87,7 +87,7 @@ def find(msg,type,message):
         #Venue     
         if(type == '@venue'):
             status = "date"
-            bot.send_message(message.chat.id, "Please use the following format to create event ")
+            bot.send_message(message.chat.id, "Please use the following format to create an event: ")
             bot.send_message(message.chat.id, "@date 22/04/2022 0900")
             return result
         #Remark
@@ -100,7 +100,7 @@ def find(msg,type,message):
         print("hello here got?")
         if(len(msg) == 3 ):
             status = "remark"
-            bot.send_message(message.chat.id, "Please use the following format to create event ")
+            bot.send_message(message.chat.id, "Please use the following format to create an event: ")
             bot.send_message(message.chat.id, "@remark Meet infront of chicken rice shop")
             return [msg[1],msg[2]]
         else:
@@ -118,14 +118,14 @@ def greet(message):
 def send_welcome(message):
     global status
     status = ""
-    bot.send_message(message.chat.id, "Welcome ! Please use the following commands.")
+    bot.send_message(message.chat.id, "Welcome! Please use the following commands: ")
     bot.send_message(message.chat.id, "/list /create /join /edit")
 
 @bot.message_handler(commands=['create'])
 def send_create(message):
     global status 
     status = "venue" 
-    bot.send_message(message.chat.id, "Please use the following format to create event ")
+    bot.send_message(message.chat.id, "Please use the following format to create an event: ")
     bot.send_message(message.chat.id, "@venue UTown Green")
 
 @bot.message_handler(commands=['cancel'])
