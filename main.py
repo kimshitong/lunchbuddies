@@ -26,6 +26,20 @@ def importing(data):
         writer.writerow(data)
     return True
 
+def editing(index, column, message):
+    global storage
+
+    loading()
+
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv('data.csv')
+
+    # Change the value at the desired cell
+    df.iloc[index, column] = message.chat.username
+
+    # Write the modified DataFrame back to the CSV file
+    df.to_csv('data.csv', index=False)
+
     
 def loading():
 
@@ -121,8 +135,10 @@ def list(message):
 
 @bot.message_handler(commands=['join'])
 def list(message):
-    Global status
-    status = "join"     
+    global status
+    status = "join" 
+    bot.send_message(message.chat.id, "Please use the following format to join event")
+    bot.send_message(message.chat.id, "@join 1") 
 
 @bot.message_handler(func =lambda msg: msg.text is not None)
 def at_answer(message): 
@@ -168,6 +184,28 @@ def at_answer(message):
                 bot.send_message(message.chat.id, "Registration Confirmed, Thanks")
         else:
             bot.send_message(message.chat.id, "Registration Failed")
+	
+    elif(status == "join"):
+        #Array Size = 2 && Validity of the number
+        loading()
+        print(bigdata)
+        if len(texts) == 2 and texts[1].isnumeric() and int(texts[1]) <= len(bigdata) and int(texts[1]) >=1:
+            if bigdata[int(texts[1])][6] == '0':
+                editing(int(texts[1]),6,message)
+                bot.send_message(message.chat.id, "See you!")
+            elif bigdata[int(texts[1])][7] == '0':
+                editing(int(texts[1]),7,message)
+                bot.send_message(message.chat.id, "See you!")
+            elif bigdata[int(texts[1])][8] == '0':
+                editing(int(texts[1]),8,message)
+                bot.send_message(message.chat.id, "See you!")
+            else:
+                bot.send_message(message.chat.id, "fku, try again")
+        else:
+            bot.send_message(message.chat.id, "fku, try again")
+
+        status = ""
+        storage = []
     
 
 
