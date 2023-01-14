@@ -200,9 +200,9 @@ def at_answer(message):
                 editing(int(texts[1]),8,message)
                 bot.send_message(message.chat.id, "See you!")
             else:
-                bot.send_message(message.chat.id, "fku, try again")
+                bot.send_message(message.chat.id, "The Event is Full")
         else:
-            bot.send_message(message.chat.id, "fku, try again")
+            bot.send_message(message.chat.id, "Invalid Input")
 
         status = ""
         storage = []
