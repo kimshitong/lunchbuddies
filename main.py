@@ -84,7 +84,8 @@ def find(msg,type,message):
             storage = []
             bot.send_message(message.chat.id, "Insufficient Information")
             return 0
-    
+
+#/Greet
 @bot.message_handler(command = ['Greet'])
 def greet(message):
     bot.reply_to(message,"hey")
@@ -118,7 +119,10 @@ def list(message):
 
     bot.send_message(message.chat.id, Message + ("="*30) )
 
-        
+@bot.message_handler(commands=['join'])
+def list(message):
+    Global status
+    status = "join"     
 
 @bot.message_handler(func =lambda msg: msg.text is not None)
 def at_answer(message): 
@@ -163,10 +167,17 @@ def at_answer(message):
                 bot.send_message(message.chat.id, "Registration Confirmed, Thanks")
         else:
             bot.send_message(message.chat.id, "Registration Failed")
+    
+    elif(status == "join"):
+        #Array Size = 2 && Validity of the number
+        #
 
+#Look into
 
     
-    
+#bla ok ha
+["bla","ok","ha"]
+/join 3 okas
     
 
     
@@ -187,3 +198,6 @@ def at_answer(message):
     
 
 bot.polling()
+
+#Join
+/join 3
