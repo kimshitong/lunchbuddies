@@ -17,7 +17,7 @@ def cancel(eventno):
     # Read the CSV file into a DataFrame
     df = pd.read_csv('data.csv')
     # Change the value of a specific cell
-    df.iloc[eventno, 9] = False
+    df.iloc[eventno, 9] = True
     # Write the DataFrame back to the CSV file
     df.to_csv('data.csv', index=False)
 
@@ -63,6 +63,7 @@ def loading():
 def find(msg,type,message):
     global status
     global storage
+    
     #Case for Venue or remark
 
     if(type != msg[0]):
@@ -125,7 +126,7 @@ def send_create(message):
     bot.send_message(message.chat.id, "@venue UTown Green")
 
 @bot.message_handler(commands=['cancel'])
-def cancel(message):
+def send_cancel(message):
     global status
     status = "cancel"     
     bot.send_message(message.chat.id, "@cancel <EventNo>  for example : @cancel 1" )
@@ -141,18 +142,27 @@ def list(message):
         Data_Month = int(singledata[2][3:5])
         Data_Year = int(singledata[2][6:10])
         CompareDate = datetime.datetime(Data_Year,Data_Month,Data_Date,int(singledata[3][0:2]),int(singledata[3][2:4]))
-         
+    
+        
+        if(singledata[9] == 'True'):
+            CancelledMessage = "<Cancelled>"
+        else:
+            CancelledMessage = ""
+
+
+
 	#Determine pax
         pax = 1
         print(singledata)
         if(singledata[6] != '0'):
-            pax += 1
+            pax += 1 
         if(singledata[7] != '0'):
             pax += 1
         if(singledata[8] != '0'):
             pax += 1
+        
         if(CompareDate > x):
-            Message += "="*30 + "\n" + "Event Detail :  \n" "Event "+ singledata[0] +" : Jio Lunch at " + singledata[1] + " ( "+ str(pax) +" / 4) \n"+"Date/Time : " + str(CompareDate) +"\n"
+            Message += "="*30 + "\n" + "Event Detail "+ CancelledMessage +" :  \n" "Event "+ singledata[0]  + " : Jio Lunch at " + singledata[1] + " ( "+ str(pax) +" / 4) \n"+"Date/Time : " + str(CompareDate) +"\n"
 
     bot.send_message(message.chat.id, Message + ("="*30) )
 
@@ -166,9 +176,8 @@ def list(message):
 @bot.message_handler(func =lambda msg: msg.text is not None)
 def at_answer(message): 
     global storage
+    global status
     texts = message.text.split()
-    print(texts)
-    print(status)
     
     if(status =="error"):
         #Reset Temp Storage
@@ -209,11 +218,17 @@ def at_answer(message):
             bot.send_message(message.chat.id, "Registration Failed")
     elif(status == "cancel"):
         #Size, Numeric, Contains 
-        if len(texts) == 2 and texts[1].isnumeric() and int(texts[1]) <= len(bigdata) and int(texts[1]) >=1:
-            cancel(texts[1])
+        loading()
+        if len(texts) == 2 and texts[1].isdigit() and int(texts[1]) <= len(bigdata) and  int(texts[1]) >= 1:
+                print('yes')
+                cancel(int(texts[1]))
+
         else:
-			status = ""
-            bot.send_message(message.chat.id, "Invalid Input")
+            print(texts)
+            print(texts[1])
+            print('no')
+            status = ""
+            bot.send_message(message.chat.id, "Invalid Input for Cancel")
 	
     elif(status == "join"):
         #Array Size = 2 && Validity of the number
