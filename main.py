@@ -17,7 +17,7 @@ def cancel(eventno):
     # Read the CSV file into a DataFrame
     df = pd.read_csv('data.csv')
     # Change the value of a specific cell
-    df.iloc[eventno, 9] = True
+    df.iloc[eventno-1, 9] = True
     # Write the DataFrame back to the CSV file
     df.to_csv('data.csv', index=False)
 
@@ -43,7 +43,7 @@ def editing(index, column, message):
     df = pd.read_csv('data.csv')
 
     # Change the value at the desired cell
-    df.iloc[index, column] = message.chat.username
+    df.iloc[index-1, column] = message.chat.username
 
     # Write the modified DataFrame back to the CSV file
     df.to_csv('data.csv', index=False)
@@ -87,7 +87,7 @@ def find(msg,type,message):
         #Venue     
         if(type == '@venue'):
             status = "date"
-            bot.send_message(message.chat.id, "Please use the following format to create an event: ")
+            bot.send_message(message.chat.id, "Please use the following format to create event ")
             bot.send_message(message.chat.id, "@date 22/04/2022 0900")
             return result
         #Remark
@@ -100,7 +100,7 @@ def find(msg,type,message):
         print("hello here got?")
         if(len(msg) == 3 ):
             status = "remark"
-            bot.send_message(message.chat.id, "Please use the following format to create an event: ")
+            bot.send_message(message.chat.id, "Please use the following format to create event ")
             bot.send_message(message.chat.id, "@remark Meet infront of chicken rice shop")
             return [msg[1],msg[2]]
         else:
@@ -116,16 +116,14 @@ def greet(message):
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    global status
-    status = ""
-    bot.send_message(message.chat.id, "Welcome! Please use the following commands: ")
-    bot.send_message(message.chat.id, "/list /create /join /edit")
+	bot.send_message(message.chat.id, "Welcome ! Please use the following commands.")
+	bot.send_message(message.chat.id, "/list /create /join /edit")
 
 @bot.message_handler(commands=['create'])
 def send_create(message):
     global status 
     status = "venue" 
-    bot.send_message(message.chat.id, "Please use the following format to create an event: ")
+    bot.send_message(message.chat.id, "Please use the following format to create event ")
     bot.send_message(message.chat.id, "@venue UTown Green")
 
 @bot.message_handler(commands=['cancel'])
@@ -135,10 +133,9 @@ def send_cancel(message):
     bot.send_message(message.chat.id, "@cancel <EventNo>  for example : @cancel 1" )
 
 @bot.message_handler(commands=['list'])
-def send_list(message):
+def list(message):
     loading()
-    Message = ""
-    print(bigdata)
+    Message = "";
     for singledata in bigdata:
         
         x = datetime.datetime.now()
@@ -167,18 +164,18 @@ def send_list(message):
         
         if(CompareDate > x):
             Message += "="*30 + "\n" + "Event Detail "+ CancelledMessage +" :  \n" "Event "+ singledata[0]  + " : Jio Lunch at " + singledata[1] + " ( "+ str(pax) +" / 4) \n"+"Date/Time : " + str(CompareDate) +"\n"
+
     bot.send_message(message.chat.id, Message + ("="*30) )
 
 @bot.message_handler(commands=['join'])
-def send_join(message):
+def list(message):
     global status
     status = "join" 
     bot.send_message(message.chat.id, "Please use the following format to join event")
     bot.send_message(message.chat.id, "@join 1") 
 
 @bot.message_handler(func =lambda msg: msg.text is not None)
-def at_answer(message):
-    loading() 
+def at_answer(message): 
     global storage
     global status
     texts = message.text.split()
@@ -222,6 +219,7 @@ def at_answer(message):
             bot.send_message(message.chat.id, "Registration Failed")
     elif(status == "cancel"):
         #Size, Numeric, Contains 
+        loading()
         if len(texts) == 2 and texts[1].isdigit() and int(texts[1]) <= len(bigdata) and  int(texts[1]) >= 1:
                 print('yes')
                 cancel(int(texts[1]))
@@ -254,27 +252,5 @@ def at_answer(message):
 
         status = ""
         storage = []
-    
-
-
-#Look into
-
-
-
-
-
-# Array = [
-# [EventID,Venue, Date, Time, Remark, Creator,userone,usertwo,userthree]
-# [100, Utown, 22/3, 1300, "hello", "Jack"],
-# [200, PGP, 23/4 , 1400, "hehe", "Dice"],
-# []
-# ]
-
-
-
-
 
 bot.polling()
-
-#Join
-# /join 3
